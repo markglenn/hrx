@@ -1,5 +1,10 @@
 defmodule Hrx.Archive do
-  alias Hrx.Parser
+  @moduledoc """
+  HRX file archive
+
+  Contains the contents in memory of an HRX file.
+  """
+
   alias Hrx.Entry
 
   defstruct [:entries]
@@ -8,36 +13,19 @@ defmodule Hrx.Archive do
           entries: %{String.t() => Entry.t()}
         }
 
-  @spec load(String.t()) :: {:error, String.t()} | {:ok, Hrx.Archive.t()}
-  def load(path) do
-    with {:ok, contents} <- File.read(path),
-         {:ok, boundary_length} <- get_boundary_length(contents),
-         {:ok, archive, "", _, _, _} <-
-           Parser.parse(contents, context: %{boundary: boundary_length}) do
-      {:ok, %__MODULE__{entries: to_entries(archive)}}
-    else
-      {:error, reason} when is_atom(reason) ->
-        {:error, :file.format_error(reason) |> to_string()}
+  @doc """
+  Read a file from the archive
 
-      {:error, reason, _rest, _context, _line, _byte_offset} ->
-        {:error, "Error processing archive: #{reason}"}
-
-      _ ->
-        {:error, "Unknown error occurred"}
+      {:ok, contents} = Hrx.Archive.read(archive, "dir/my-file.txt")
+      {:error, :enoent} = Hrx.Archive.read(archive, "non-existant-file.txt")
+  """
+  @spec read(t(), String.t()) :: {:ok, String.t()} | {:error, :enoent}
+  def read(%__MODULE__{entries: entries}, filename) do
+    case entries[filename] do
+      nil -> {:error, :enoent}
+      contents -> {:ok, contents}
     end
   end
 
-  defp to_entries(archive) do
-    archive
-    |> Enum.map(&Entry.new/1)
-    |> Enum.map(&{&1.path, &1})
-    |> Map.new()
-  end
-
-  defp get_boundary_length(<<"<", rest::binary>>) do
-    case :binary.match(rest, ">") do
-      {start, _} -> {:ok, start}
-      _ -> {:error, "Initial boundary not found"}
-    end
-  end
+  def exists?(%__MODULE__{entries: entries}, path), do: Map.has_key?(entries, path)
 end

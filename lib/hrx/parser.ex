@@ -1,4 +1,8 @@
 defmodule Hrx.Parser do
+  @moduledoc """
+  HRX raw file parser
+  """
+
   import NimbleParsec
 
   # path-character ::= any character other than U+0000 through U+001F, U+007F DELETE, U+002F
