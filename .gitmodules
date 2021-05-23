@@ -1,0 +1,3 @@
+[submodule "vendor/hrx"]
+	path = vendor/hrx
+	url = git@github.com:google/hrx.git
