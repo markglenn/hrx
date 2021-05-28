@@ -72,12 +72,15 @@ defmodule Hrx do
            Parser.parse(contents, context: %{boundary: boundary_length}) do
       {:ok, %Archive{entries: to_entries(archive)}}
     else
+      # File loading error
       {:error, reason} when is_atom(reason) ->
         {:error, :file.format_error(reason) |> to_string()}
 
+      # Generic error from parser
       {:error, reason} when is_binary(reason) ->
         {:error, reason}
 
+      # Parsing error
       {:error, reason, _rest, _context, _line, _byte_offset} ->
         {:error, "Error processing archive: #{reason}"}
 

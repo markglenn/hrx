@@ -3,8 +3,6 @@ defmodule Hrx.ArchiveTest do
 
   @base_path "vendor/hrx/example"
 
-  alias Hrx.Archive
-
   test "all the passing examples" do
     @base_path
     |> Path.join("*.hrx")
@@ -13,11 +11,18 @@ defmodule Hrx.ArchiveTest do
     |> Enum.each(&assert_archive/1)
   end
 
+  test "invalid directory contents" do
+    assert {:error, _} =
+             @base_path
+             |> Path.join("invalid/directory-contents.hrx")
+             |> Hrx.load()
+  end
+
   defp assert_archive(filename) do
     assert {:ok, archive} =
              @base_path
              |> Path.join(filename)
-             |> Archive.load()
+             |> Hrx.load()
 
     result_path =
       @base_path
@@ -29,15 +34,12 @@ defmodule Hrx.ArchiveTest do
 
   defp assert_entry({filename, %{contents: {:file, contents}}}, result_path) do
     path = Path.join([result_path, filename])
-
     assert {:ok, file_contents} = File.read(path)
-
     assert file_contents == contents, "Expected file #{filename} to match contents"
   end
 
   defp assert_entry({directory, %{contents: :directory}}, result_path) do
     path = Path.join([result_path, directory])
-
     assert File.exists?(path)
   end
 end
