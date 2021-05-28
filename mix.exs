@@ -5,7 +5,7 @@ defmodule Hrx.MixProject do
     [
       app: :hrx,
       name: "hrx",
-      version: "0.1.0",
+      version: "0.1.1",
       description: description(),
       source_url: "https://github.com/markglenn/hrx",
       homepage_url: "https://github.com/markglenn/hrx",
