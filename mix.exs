@@ -13,7 +13,7 @@ defmodule Hrx.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
-      docs: [main: "HRX", extras: ["README.md"]],
+      docs: [main: "Hrx", extras: ["README.md"]],
       package: [
         maintainers: ["markglenn@gmail.com"],
         licenses: ["MIT"],
