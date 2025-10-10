@@ -3,7 +3,7 @@
 [Human Readable Archive](https://github.com/google/hrx) parser for Elixir.
 
 HRX files are useful for loading data for a test suite where creating multiple
-files is not desired.  The HRX format is easy to read and manually edit for quicker iteration.
+files is not desired. The HRX format is easy to read and manually edit for quicker iteration.
 
 For more information, please see the official Github repository:
 [https://github.com/google/hrx](https://github.com/google/hrx)
@@ -56,4 +56,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/hrx](https://hexdocs.pm/hrx).
-

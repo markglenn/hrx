@@ -107,4 +107,6 @@ defmodule Hrx do
       _ -> {:error, "Invalid archive format. Missing initial boundary."}
     end
   end
+
+  defp get_boundary_length(_), do: {:error, "Invalid archive format. Missing initial boundary."}
 end

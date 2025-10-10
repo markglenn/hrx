@@ -5,7 +5,7 @@ defmodule Hrx.MixProject do
     [
       app: :hrx,
       name: "hrx",
-      version: "0.1.1",
+      version: "0.1.2",
       description: description(),
       source_url: "https://github.com/markglenn/hrx",
       homepage_url: "https://github.com/markglenn/hrx",
@@ -14,6 +14,9 @@ defmodule Hrx.MixProject do
       deps: deps(),
       aliases: aliases(),
       docs: [main: "Hrx", extras: ["README.md"]],
+      dialyzer: [
+        plt_add_apps: [:syntax_tools]
+      ],
       package: [
         maintainers: ["markglenn@gmail.com"],
         licenses: ["MIT"],
@@ -25,7 +28,7 @@ defmodule Hrx.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :syntax_tools]
     ]
   end
 

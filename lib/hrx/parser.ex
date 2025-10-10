@@ -19,8 +19,8 @@ defmodule Hrx.Parser do
   # path-component ::= path-character+ // not equal to "." or ".."
   path_component =
     times(path_character, min: 1)
-    |> post_traverse({:reject_special_path_component, ['.']})
-    |> post_traverse({:reject_special_path_component, ['..']})
+    |> post_traverse({:reject_special_path_component, [~c"."]})
+    |> post_traverse({:reject_special_path_component, [~c".."]})
 
   # path ::= path-component ("/" path-component)*
   path =
@@ -100,10 +100,10 @@ defmodule Hrx.Parser do
   defparsec(:parse_boundary, boundary)
 
   defp reject_special_path_component(_rest, match, _context, _line, _offset, match),
-    do: {:error, "Cannot have '#{match}' path component"}
+    do: {:error, "Cannot have '#{List.to_string(match)}' path component"}
 
-  defp reject_special_path_component(_rest, args, context, _line, _offset, _) do
-    {args, context}
+  defp reject_special_path_component(rest, args, context, _line, _offset, _) do
+    {rest, args, context}
   end
 
   defp not_boundary(<<"\n<", rest::binary>>, %{boundary: boundary} = context, _, _) do
@@ -115,6 +115,6 @@ defmodule Hrx.Parser do
 
   defp not_boundary(_, context, _, _), do: {:cont, context}
 
-  defp drop_initial_newline(_, ["\n" <> args], context, _, _), do: {[args], context}
-  defp drop_initial_newline(_, args, context, _, _), do: {args, context}
+  defp drop_initial_newline(rest, ["\n" <> args], context, _, _), do: {rest, [args], context}
+  defp drop_initial_newline(rest, args, context, _, _), do: {rest, args, context}
 end
